@@ -10,25 +10,25 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   bool estaLogin = false;
 
-  Future<void> singInWithGoogle() async{
-    try{
+  Future<void> singInWithGoogle() async {
+    try {
       setState(() {
         estaLogin = true;
       });
       //Abre el selector de cuentas Google
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       //Usuario canceló el login
-      if (googleUser == null){
+      if (googleUser == null) {
         setState(() {
           estaLogin = false;
         });
         return;
       }
       //Obtener tokens de autenticacion
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       //Credencial para Firebase
       final credencial = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -40,16 +40,11 @@ class _LoginPageState extends State<LoginPage> {
       if (mounted) {
         Navigator.pushReplacementNamed(context, '/home');
       }
-
-    } catch (e){
+    } catch (e) {
       //Muestra error por pantalla
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error al iniciar sesión: $e'),
-        )
-      );
-    }
-    finally{
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Error al iniciar sesión: $e')));
+    } finally {
       setState(() {
         estaLogin = false;
       });
@@ -64,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding:  const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -85,9 +80,8 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 30),
 
                 //Titulo
-
                 const Text(
-                  'Objetos perdidos USM',
+                  'Objetos Perdidos USM',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 28,
@@ -99,37 +93,28 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 10),
 
                 //Subtítulo
-
                 const Text(
-                  'Encuentra o reporta objetos perdidos dentyro del campus',
+                  'Encuentra o reporta objetos perdidos dentro del campus',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black54,
-                  ),
+                  style: TextStyle(fontSize: 16, color: Colors.black54),
                 ),
-                
-                const SizedBox(height: 50),
+
+                const SizedBox(height: 35),
 
                 //Boton Google Login
-
                 SizedBox(
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton.icon(
-                    onPressed: 
-                      estaLogin ? null : singInWithGoogle,
+                    onPressed: estaLogin ? null : singInWithGoogle,
                     label: Text(
-                      estaLogin
-                        ?'Iniciado sesión...'
-                        :'Continuar con Google',
+                      estaLogin ? 'Iniciado sesión...' : 'Continuar con Google',
                     ),
-                    style:  ElevatedButton.styleFrom(
+                    style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.indigo,
                       foregroundColor: Colors.white,
-                      shape:  RoundedRectangleBorder(
-                        borderRadius: 
-                          BorderRadius.circular(12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                   ),
@@ -138,26 +123,21 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 30),
                 //Información adicinal
                 const Text(
-                  'Utiliza tu cuenta institucional o personal de Google para acceder',
+                  'Utiliza tu cuenta de Google para acceder',
                   textAlign: TextAlign.center,
-                  style:  TextStyle(
-                    color: Colors.black54,
-                  ),
+                  style: TextStyle(color: Colors.black54),
                 ),
 
                 const SizedBox(height: 50),
                 //Pie de página
                 const Text(
                   'Desarrollo de Aplicaciones Móviles',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
-                )
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                ),
               ],
             ),
           ),
-        )
+        ),
       ),
     );
   }
