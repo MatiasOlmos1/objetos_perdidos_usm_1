@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:objetos_perdidos_usm1/page/crear_publicacion_page.dart';
 import 'package:objetos_perdidos_usm1/models/datos_obj.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:objetos_perdidos_usm1/widget/publicacion_card.dart';
 import 'package:objetos_perdidos_usm1/models/datos_obj.dart';
+import 'package:objetos_perdidos_usm1/widget/colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -108,87 +111,89 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context, index) {
 
               final publicacion =
-                  DatosObj.fromFirestore(
-                    publicaciones[index],
-                  );
+              DatosObj.fromFirestore(
+                publicaciones[index],
+              );
 
+              return ObjectCard(
+                object: publicacion,
+              );
+            },
+          );
+        },
+      );
+    case 2:
+      return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+          .collection('publicaciones').where(
+            'authorId', isEqualTo: usuario!.uid
+          ).snapshots(), 
+        builder: (context, snapshot) {
+          if(snapshot.connectionState == ConnectionState.waiting){
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.hasError){
+            return const Center(
+              child: Text(
+                'Error al cargar tus publicaciones',
+              ),
+            );
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty){
+            return const Center(
+              child: Text(
+                'No has publicado objetos aún'
+              ),
+            );
+          }
+          final publicaciones = snapshot.data!.docs;
+
+          return ListView.builder(
+            itemCount: publicaciones.length,
+            itemBuilder: (context, index){
+              final publicacion = 
+              DatosObj.fromFirestore(
+                publicaciones[index],  
+              );
               return Card(
-                margin: const EdgeInsets.symmetric(
+                margin: EdgeInsets.symmetric(
                   horizontal: 12,
                   vertical: 8,
                 ),
-
                 elevation: 4,
+                child: ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
 
-                child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
-
-                  children: [
-
-                    Image.memory(
+                    child:Image.memory(
                       publicacion.photo,
-                      height: 220,
-                      width: double.infinity,
+                      width: 70,
+                      height: 70,
                       fit: BoxFit.cover,
                     ),
-
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-
-                      child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
-
-                        children: [
-
-                          Text(
-                            publicacion.title,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight:
-                                  FontWeight.bold,
-                            ),
-                          ),
-
-                          const SizedBox(height: 8),
-
-                          Text(
-                            publicacion.description,
-                          ),
-
-                          const SizedBox(height: 10),
-
-                          Chip(
-                            label: Text(
-                              publicacion.type,
-                            ),
-                          ),
-
-                          const SizedBox(height: 5),
-
-                          Text(
-                            'Categoría: ${publicacion.categoryName}',
-                          ),
-
-                          Text(
-                            'Lugar: ${publicacion.place}',
-                          ),
-
-                          Text(
-                            'Estado: ${publicacion.status}',
-                          ),
-
-                          Text(
-                            'Publicado por: ${publicacion.authorName}',
-                          ),
-                        ],
+                  ),
+                  title: Text(
+                    publicacion.title,
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: .start,
+                    children: [
+                      Text(
+                        publicacion.categoryName
                       ),
-                    ),
-                  ],
+                      Text(
+                        publicacion.status
+                      ),
+                      Text(
+                        publicacion.place
+                      )
+                    ],
+                  ),
                 ),
               );
-            },
+            }
           );
         },
       );
@@ -206,7 +211,11 @@ class _HomePageState extends State<HomePage> {
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      title: const Text('Objetos Perdidos USM'),
+      backgroundColor: kSecondaryColor,
+      iconTheme: IconThemeData(
+        color: kTextColor,
+      ),
+      title: const Text('Objetos Perdidos USM', style: TextStyle(color:kTextColor),),
       centerTitle: true,
     ),
 
@@ -281,7 +290,7 @@ Widget build(BuildContext context) {
       child: BottomNavigationBar(
         currentIndex: indexNavegacion,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.indigo,
+        selectedItemColor: kTertiaryColor,
         unselectedItemColor: Colors.grey,
 
         onTap: (index) {
@@ -314,8 +323,12 @@ Widget build(BuildContext context) {
             label: 'Inicio',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle),
+            icon: Icon(MdiIcons.plusBox),
             label: 'Publicar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(MdiIcons.listBox),
+            label: 'Mis publicaciones'
           ),
         ],
       ),

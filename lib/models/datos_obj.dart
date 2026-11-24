@@ -22,6 +22,7 @@ class DatosObj {
 
   final String authorName;
   final String authorEmail;
+  final String authorId;
 
   DatosObj({
     required this.id,
@@ -36,6 +37,7 @@ class DatosObj {
     required this.status,
     required this.authorName,
     required this.authorEmail,
+    required this.authorId,
   });
   factory DatosObj.fromFirestore(
     DocumentSnapshot doc,
@@ -53,7 +55,8 @@ class DatosObj {
       photo: (data['photo'] as Blob).bytes, 
       status: data['status'], 
       authorName: data['authorName'], 
-      authorEmail:data['authorEmail']
+      authorEmail:data['authorEmail'],
+      authorId: data['authorId'],
     );
   }
 }

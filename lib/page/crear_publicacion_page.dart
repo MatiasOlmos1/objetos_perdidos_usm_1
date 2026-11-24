@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:objetos_perdidos_usm1/models/datos_obj.dart';
+import 'package:objetos_perdidos_usm1/widget/colors.dart';
 
 class CrearPublicacionPage extends StatefulWidget {
   final Function(DatosObj) onSave;
@@ -98,6 +99,7 @@ class _CrearPublicacionPageState extends State<CrearPublicacionPage> {
       status: 'Vigente',
       authorName: widget.currentUser.displayName ?? 'Usuario',
       authorEmail: widget.currentUser.email ?? '',
+      authorId: widget.currentUser.uid,
     ); 
 
     try {
@@ -116,6 +118,7 @@ class _CrearPublicacionPageState extends State<CrearPublicacionPage> {
         'authorName': nuevaPublicacion.authorName,
 
         'authorEmail': nuevaPublicacion.authorEmail,
+        'authorId' : widget.currentUser.uid,
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Publicación creada correctamente')),
@@ -140,7 +143,12 @@ class _CrearPublicacionPageState extends State<CrearPublicacionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Nueva Publicación')),
+      appBar: AppBar(
+        backgroundColor: kSecondaryColor,
+        iconTheme: IconThemeData(
+          color: kTextColor,
+        ),
+        title: const Text('Nueva Publicación', style: TextStyle(color: kTextColor),)),
 
       body: SafeArea(
           child: SingleChildScrollView(

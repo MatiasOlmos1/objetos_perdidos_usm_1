@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //Color de fondo Personalizado
-      backgroundColor: const Color(0xfff4f7fc),
+      backgroundColor:   kBackgroundColor,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
