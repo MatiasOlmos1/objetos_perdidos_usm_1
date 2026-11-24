@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class DatosObj {
   final String id;
 
@@ -35,4 +37,23 @@ class DatosObj {
     required this.authorName,
     required this.authorEmail,
   });
+  factory DatosObj.fromFirestore(
+    DocumentSnapshot doc,
+  ){
+    final data = doc.data() as Map<String, dynamic>;
+    return DatosObj(
+      id: doc.id, 
+      title: data['title'], 
+      description: data['description'], 
+      type: data['type'], 
+      categoryId: data['categoryId'], 
+      categoryName: data['categoryName'], 
+      place: data['place'], 
+      dateTime: (data['dateTime']as Timestamp).toDate(), 
+      photo: (data['photo'] as Blob).bytes, 
+      status: data['status'], 
+      authorName: data['authorName'], 
+      authorEmail:data['authorEmail']
+    );
+  }
 }

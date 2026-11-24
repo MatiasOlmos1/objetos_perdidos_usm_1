@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:objetos_perdidos_usm1/page/crear_publicacion_page.dart';
 import 'package:objetos_perdidos_usm1/models/datos_obj.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:objetos_perdidos_usm1/models/datos_obj.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -59,43 +61,157 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget navegacion() {
-    switch (indexNavegacion) {
-      case 0:
-        return const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.home,
-              size: 80,
-              color: Colors.indigo,
-            ),
-            SizedBox(height: 15),
-            Text(
-              'Inicio',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        );
+  switch (indexNavegacion) {
 
-      default:
-        return const Center(
-          child: Text('Página no encontrada'),
-        );
-    }
+    case 0:
+      return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('publicaciones')
+            .orderBy(
+              'dateTime',
+              descending: true,
+            )
+            .snapshots(),
+
+        builder: (context, snapshot) {
+
+          if (snapshot.connectionState ==
+              ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text(
+                'Error al cargar publicaciones',
+              ),
+            );
+          }
+
+          if (!snapshot.hasData ||
+              snapshot.data!.docs.isEmpty) {
+            return const Center(
+              child: Text(
+                'No hay publicaciones disponibles',
+              ),
+            );
+          }
+
+          final publicaciones =
+              snapshot.data!.docs;
+
+          return ListView.builder(
+            itemCount: publicaciones.length,
+
+            itemBuilder: (context, index) {
+
+              final publicacion =
+                  DatosObj.fromFirestore(
+                    publicaciones[index],
+                  );
+
+              return Card(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+
+                elevation: 4,
+
+                child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+
+                  children: [
+
+                    Image.memory(
+                      publicacion.photo,
+                      height: 220,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(12),
+
+                      child: Column(
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start,
+
+                        children: [
+
+                          Text(
+                            publicacion.title,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight:
+                                  FontWeight.bold,
+                            ),
+                          ),
+
+                          const SizedBox(height: 8),
+
+                          Text(
+                            publicacion.description,
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          Chip(
+                            label: Text(
+                              publicacion.type,
+                            ),
+                          ),
+
+                          const SizedBox(height: 5),
+
+                          Text(
+                            'Categoría: ${publicacion.categoryName}',
+                          ),
+
+                          Text(
+                            'Lugar: ${publicacion.place}',
+                          ),
+
+                          Text(
+                            'Estado: ${publicacion.status}',
+                          ),
+
+                          Text(
+                            'Publicado por: ${publicacion.authorName}',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      );
+
+    default:
+      return const Center(
+        child: Text(
+          'Página no encontrada',
+        ),
+      );
   }
+}
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Objetos Perdidos USM'),
-        centerTitle: true,
-      ),
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('Objetos Perdidos USM'),
+      centerTitle: true,
+    ),
 
-      drawer: Drawer(
+    drawer: Drawer(
+      child: SafeArea(
         child: Column(
           children: [
             UserAccountsDrawerHeader(
@@ -137,35 +253,37 @@ class _HomePageState extends State<HomePage> {
 
             const Divider(),
 
-            Padding(
-              padding: const EdgeInsets.only(bottom: 50),
-              child: ListTile(
-                leading: const Icon(
-                  Icons.logout,
+            ListTile(
+              leading: const Icon(
+                Icons.logout,
+                color: Colors.red,
+              ),
+              title: const Text(
+                'Cerrar sesión',
+                style: TextStyle(
                   color: Colors.red,
                 ),
-                title: const Text(
-                  'Cerrar sesión',
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
-                ),
-                onTap: cerrarSesion,
               ),
+              onTap: cerrarSesion,
             ),
           ],
         ),
       ),
+    ),
 
-      body: Center(
+    body: SafeArea(
+      child: Center(
         child: navegacion(),
       ),
+    ),
 
-      bottomNavigationBar: BottomNavigationBar(
+    bottomNavigationBar: SafeArea(
+      child: BottomNavigationBar(
         currentIndex: indexNavegacion,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.indigo,
         unselectedItemColor: Colors.grey,
+
         onTap: (index) {
           if (index == 1) {
             Navigator.push(
@@ -189,6 +307,7 @@ class _HomePageState extends State<HomePage> {
             indexNavegacion = index;
           });
         },
+
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -200,6 +319,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
+import 'package:objetos_perdidos_usm1/widget/colors.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -86,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.indigo,
+                    color: kSecondaryColor,
                   ),
                 ),
 
@@ -111,8 +112,8 @@ class _LoginPageState extends State<LoginPage> {
                       estaLogin ? 'Iniciado sesión...' : 'Continuar con Google',
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.indigo,
-                      foregroundColor: Colors.white,
+                      backgroundColor: kSecondaryColor,
+                      foregroundColor: kTextColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -125,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                 const Text(
                   'Utiliza tu cuenta de Google para acceder',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black54),
+                  style: TextStyle(color: kText2Color),
                 ),
 
                 const SizedBox(height: 50),
