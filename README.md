@@ -1,6 +1,8 @@
 # objetos_perdidos_usm1
 
-A new Flutter project.
+Projecto Flutter 2026
+
+Para Desarrollo de aplicaciones moviles 301
 
 ## Getting Started
 
