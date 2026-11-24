@@ -4,6 +4,8 @@ Projecto Flutter 2026
 
 Para Desarrollo de aplicaciones moviles 301
 
+Integrantes: Martin Leroux, Matias Olmos.
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
