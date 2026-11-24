@@ -15,7 +15,7 @@ class ObjectCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
 
       elevation: 8,
-      shadowColor: Colors.black26,
+      shadowColor: kText2Color,
 
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Column(
@@ -66,7 +66,6 @@ class ObjectCard extends StatelessWidget {
                   style: const TextStyle(color: kText2Color, fontSize: 15),
                 ),
                 const SizedBox(height: 12),
-                // Ubicacion publicacion
                 Row(
                   children: [
                     const Icon(
@@ -106,23 +105,20 @@ class ObjectCard extends StatelessWidget {
                     // categoria
                     Chip(
                       avatar: const Icon(Icons.category, size: 18),
-
                       label: Text(object.categoryName),
-
                       backgroundColor: Colors.blue.shade100,
                     ),
                     // estado devuelto/vigente
                     Chip(
                       avatar: Icon(
                         devuelto ? Icons.check_circle : Icons.schedule,
-                        color: Colors.white,
-
+                        color: kTextColor,
                         size: 18,
                       ),
                       label: Text(
                         object.status,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: kTextColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -138,6 +134,7 @@ class ObjectCard extends StatelessWidget {
                   "Publicado por ${object.authorName}",
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
                 ),
+
                 const SizedBox(height: 15),
 
                 SizedBox(
@@ -170,7 +167,7 @@ class ObjectCard extends StatelessWidget {
 
                     style: ElevatedButton.styleFrom(
                       backgroundColor: kPrimaryColor,
-                      foregroundColor: Colors.white,
+                      foregroundColor: kTextColor,
 
                       elevation: 2,
 

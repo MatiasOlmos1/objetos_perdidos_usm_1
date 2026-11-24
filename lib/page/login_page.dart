@@ -27,17 +27,16 @@ class _LoginPageState extends State<LoginPage> {
         });
         return;
       }
-      //Obtener tokens de autenticacion
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
-      //Credencial para Firebase
+      //Verificacion de la existencia de la cuenta de Google
       final credencial = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
       //Inicio de sesion en Firebase
       await FirebaseAuth.instance.signInWithCredential(credencial);
-      //Navega a Home
+      
       if (mounted) {
         Navigator.pushReplacementNamed(context, '/home');
       }
@@ -55,7 +54,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //Color de fondo Personalizado
       backgroundColor:   kBackgroundColor,
       body: SafeArea(
         child: Center(
@@ -64,7 +62,6 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                //Icono principal
                 Container(
                   padding: const EdgeInsets.all(25),
                   decoration: BoxDecoration(
@@ -80,7 +77,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 30),
 
-                //Titulo
                 const Text(
                   'Objetos Perdidos USM',
                   textAlign: TextAlign.center,
@@ -93,7 +89,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 10),
 
-                //Subtítulo
                 const Text(
                   'Encuentra o reporta objetos perdidos dentro del campus',
                   textAlign: TextAlign.center,
@@ -122,7 +117,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 const SizedBox(height: 30),
-                //Información adicinal
                 const Text(
                   'Utiliza tu cuenta de Google para acceder',
                   textAlign: TextAlign.center,
@@ -130,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 const SizedBox(height: 50),
-                //Pie de página
+
                 const Text(
                   'Desarrollo de Aplicaciones Móviles',
                   style: TextStyle(color: Colors.grey, fontSize: 12),

@@ -65,8 +65,8 @@ class DetallePublicacionPage extends StatelessWidget {
                         Chip(
                           label: Text(object.status),
                           backgroundColor: devuelto
-                              ? Colors.green
-                              : Colors.orange,
+                              ? kTertiaryColor
+                              : kVigenteColor,
                         ),
                       ],
                     ),
@@ -168,7 +168,7 @@ class DetallePublicacionPage extends StatelessWidget {
                             devuelto? 'Objeto ya devuelto': 'Marcar como devuelto',
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
+                            backgroundColor: kTertiaryColor,
                             foregroundColor: kTextColor,
                           ),
                         ),

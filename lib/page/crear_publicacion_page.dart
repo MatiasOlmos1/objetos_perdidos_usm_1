@@ -63,6 +63,7 @@ class _CrearPublicacionPageState extends State<CrearPublicacionPage> {
   }
 
   Future<void> guardarPublicacion() async{
+
     if (!_formKey.currentState!.validate()){
       return;
     }
@@ -74,6 +75,7 @@ class _CrearPublicacionPageState extends State<CrearPublicacionPage> {
       );
       return;
     }
+    
     final pesoKB = _imagenBytes!.lengthInBytes / 1024;
 
     if (pesoKB > 850){

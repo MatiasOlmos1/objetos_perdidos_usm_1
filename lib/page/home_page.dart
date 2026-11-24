@@ -335,7 +335,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-  @override
+@override
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
@@ -447,7 +447,7 @@ Widget build(BuildContext context) {
 
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(MdiIcons.home),
             label: 'Inicio',
           ),
           BottomNavigationBarItem(
