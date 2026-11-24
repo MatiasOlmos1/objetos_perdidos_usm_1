@@ -17,7 +17,7 @@ class DetallePublicacionPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: kSecondaryColor,
+        backgroundColor: kPrimaryColor,
         iconTheme: IconThemeData(
           color: kTextColor,
         ),
@@ -173,25 +173,6 @@ class DetallePublicacionPage extends StatelessWidget {
                           ),
                         ),
                       )
-
-
-                    /*SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: devuelto? null: ()async {
-                          await FirebaseFirestore.instance.collection('publicaciones').doc(object.id).update({'status': 'Devuelto',});
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.check_circle),
-                        label: Text(
-                          devuelto? 'Objeto ya devuelto' : 'Marcar como devuelto',
-                        ),
-                        style:  ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          foregroundColor: kTextColor,
-                        ),
-                      ),
-                    )*/
                   ],
                 ),
               ),

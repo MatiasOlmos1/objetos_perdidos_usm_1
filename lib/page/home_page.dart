@@ -4,8 +4,8 @@ import 'package:flutter_material_design_icons/flutter_material_design_icons.dart
 import 'package:objetos_perdidos_usm1/page/crear_publicacion_page.dart';
 import 'package:objetos_perdidos_usm1/models/datos_obj.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:objetos_perdidos_usm1/page/detalle_publicacion_page.dart';
 import 'package:objetos_perdidos_usm1/widget/publicacion_card.dart';
-import 'package:objetos_perdidos_usm1/models/datos_obj.dart';
 import 'package:objetos_perdidos_usm1/widget/colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -59,6 +59,80 @@ class _HomePageState extends State<HomePage> {
 
       if (mounted) {
         Navigator.pushReplacementNamed(context, '/login');
+      }
+    }
+  }
+  //Eliminar la publicacion.
+  Future<void> eliminarPublicacion(
+    BuildContext context,
+    DatosObj publicacion,
+  ) async {
+    final confirmar = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          'Eliminar publicación',
+        ),
+        content: Text(
+          '¿Desea eliminar "${publicacion.title}"?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, false);
+            },
+            child: const Text('Cancelar'),
+          ),
+
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Eliminar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmar != true) return;
+
+    try {
+
+      await FirebaseFirestore.instance
+          .collection('publicaciones')
+          .doc(publicacion.id)
+          .delete();
+
+      if (context.mounted) {
+
+        ScaffoldMessenger.of(context)
+            .showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Publicación eliminada correctamente',
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+
+    } catch (e) {
+
+      if (context.mounted) {
+
+        ScaffoldMessenger.of(context)
+            .showSnackBar(
+          SnackBar(
+            content: Text(
+              'Error al eliminar: $e',
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     }
   }
@@ -158,41 +232,95 @@ class _HomePageState extends State<HomePage> {
                 publicaciones[index],  
               );
               return Card(
-                margin: EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                elevation: 4,
-                child: ListTile(
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  elevation: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
 
-                    child:Image.memory(
-                      publicacion.photo,
-                      width: 70,
-                      height: 70,
-                      fit: BoxFit.cover,
+                          child: Image.memory(
+                            publicacion.photo,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                publicacion.title,
+
+                                style: const TextStyle(
+                                  fontWeight:
+                                      FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                publicacion.categoryName,
+                              ),
+                              Text(
+                                publicacion.status,
+                              ),
+                              Text(
+                                publicacion.place,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.visibility,
+                                color: kPrimaryColor,
+                              ),
+                              tooltip: 'Ver detalles',
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        DetallePublicacionPage(
+                                      object:
+                                          publicacion,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.delete,
+                                color: kSecondariColor,
+                              ),
+                              tooltip:
+                                  'Eliminar publicación',
+                              onPressed: () {
+                                eliminarPublicacion(
+                                  context,
+                                  publicacion,
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  title: Text(
-                    publicacion.title,
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: .start,
-                    children: [
-                      Text(
-                        publicacion.categoryName
-                      ),
-                      Text(
-                        publicacion.status
-                      ),
-                      Text(
-                        publicacion.place
-                      )
-                    ],
-                  ),
-                ),
-              );
+                );
+
             }
           );
         },
@@ -211,7 +339,7 @@ class _HomePageState extends State<HomePage> {
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      backgroundColor: kSecondaryColor,
+      backgroundColor: kPrimaryColor,
       iconTheme: IconThemeData(
         color: kTextColor,
       ),
@@ -290,7 +418,7 @@ Widget build(BuildContext context) {
       child: BottomNavigationBar(
         currentIndex: indexNavegacion,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: kTertiaryColor,
+        selectedItemColor: kPrimaryColor,
         unselectedItemColor: Colors.grey,
 
         onTap: (index) {

@@ -144,7 +144,7 @@ class _CrearPublicacionPageState extends State<CrearPublicacionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: kSecondaryColor,
+        backgroundColor: kPrimaryColor,
         iconTheme: IconThemeData(
           color: kTextColor,
         ),

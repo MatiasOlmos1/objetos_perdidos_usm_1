@@ -53,7 +53,7 @@ class ObjectCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: kSecondaryColor,
+                    color: kPrimaryColor,
                   ),
                 ),
 
@@ -169,7 +169,7 @@ class ObjectCard extends StatelessWidget {
                     ),
 
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: kSecondaryColor,
+                      backgroundColor: kPrimaryColor,
                       foregroundColor: Colors.white,
 
                       elevation: 2,

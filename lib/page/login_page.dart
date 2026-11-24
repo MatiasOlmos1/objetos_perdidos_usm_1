@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Icon(
                     Icons.find_in_page,
                     size: 80,
-                    color: Colors.indigo,
+                    color: kPrimaryColor,
                   ),
                 ),
 
@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: kSecondaryColor,
+                    color: kPrimaryColor,
                   ),
                 ),
 
@@ -112,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                       estaLogin ? 'Iniciado sesión...' : 'Continuar con Google',
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: kSecondaryColor,
+                      backgroundColor: kPrimaryColor,
                       foregroundColor: kTextColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
